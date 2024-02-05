@@ -1,7 +1,7 @@
 export const apiUrl = "https://rickandmortyapi.com/api"
 export const speciesFilter = [
     { label: "human", value: "human" },
-    { label: "mytholog", value: "mytholog" },
+    { label: "mytholog", value: "mythological creature" },
     { label: "alien", value: "alien" }
 ]
 export const genderFilter = [

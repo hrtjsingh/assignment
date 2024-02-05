@@ -13,6 +13,7 @@ const Listing = () => {
     const [data, setData] = useState([])
     const [tempData, setTempData] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [isSearch, setIsSearch] = useState(false)
     const [searchValue, setSearchValue] = useState("")
     const [filters, setFilters] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
@@ -55,6 +56,10 @@ const Listing = () => {
         if (filters.length > 0) {
             filterCharacters()
         } else {
+            if (isSearch) {
+                searchHandler()
+                return
+            }
             getData()
         }
     }, [filters])
@@ -63,9 +68,11 @@ const Listing = () => {
         if (type === "clear") {
             setSearchValue("")
             setTempData([])
+            setIsSearch(false)
             return
         }
         if (searchValue.length > 2) {
+            setIsSearch(true)
             const fillterd = data.filter((item) => item.name.toLowerCase().includes(searchValue))
             setTempData(fillterd)
         }
@@ -81,19 +88,27 @@ const Listing = () => {
             }
         };
     }, [filters]);
-
     const sortingHandler = (value) => {
-        let sortedData;
-        if (value === "asc") {
-            sortedData = [...data].sort((a, b) => a.id - b.id);
+        const sourceData = filters.length > 0 || isSearch ? tempData : data;
+        const sortedData = [...sourceData].sort((a, b) => {
+            if (value === "asc") {
+                return a.id - b.id;
+            } else {
+                return b.id - a.id;
+            }
+        });
+        if (filters.length > 0 || isSearch) {
+            setTempData(sortedData);
         } else {
-            sortedData = [...data].sort((a, b) => b.id - a.id);
+            setData(sortedData);
         }
-        setData(sortedData);
     };
 
+
     function filterCharacters() {
-        const filterdData = data.filter(character => {
+        const sourceData = isSearch ? tempData : data;
+        const dataSource = sourceData.length > 0 ? sourceData : data
+        const filterdData = dataSource.filter(character => {
             if (
                 filters.includes(character.gender.toLowerCase()) ||
                 filters.includes(character.species.toLowerCase())
@@ -161,7 +176,7 @@ const Listing = () => {
                     ))}
                 </div>}
                 <div className='listing' ref={scrollRef}>
-                    {filters.length > 0 || searchValue !== "" ?
+                    {filters.length > 0 || isSearch ?
                         tempData?.map((item) => (
                             <Card key={Math.random()} data={item} />
                         )) :
