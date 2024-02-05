@@ -62,13 +62,12 @@ const Listing = () => {
     const searchHandler = (type = "search") => {
         if (type === "clear") {
             setSearchValue("")
-            setData([])
-            getData()
+            setTempData([])
             return
         }
         if (searchValue.length > 2) {
             const fillterd = data.filter((item) => item.name.toLowerCase().includes(searchValue))
-            setData(fillterd)
+            setTempData(fillterd)
         }
     }
 
@@ -162,7 +161,7 @@ const Listing = () => {
                     ))}
                 </div>}
                 <div className='listing' ref={scrollRef}>
-                    {filters.length > 0 ?
+                    {filters.length > 0 || searchValue !== "" ?
                         tempData?.map((item) => (
                             <Card key={Math.random()} data={item} />
                         )) :
