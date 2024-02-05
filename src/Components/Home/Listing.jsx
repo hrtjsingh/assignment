@@ -80,7 +80,6 @@ const Listing = () => {
         } else {
             sortedData = [...data].sort((a, b) => b.id - a.id);
         }
-        console.log(sortedData)
         setData(sortedData);
     };
 
