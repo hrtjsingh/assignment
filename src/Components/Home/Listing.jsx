@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Filters from './Filters'
 import { TbFilterStar } from "react-icons/tb";
-
 import { IoCloseOutline } from "react-icons/io5";
 import SearchBar from './SearchBar'
 import Card from './Card'
@@ -43,10 +42,8 @@ const Listing = () => {
     const [isFetching, setIsFetching] = useInfiniteScroll(getData, currentPage, recordsEnd);
 
     useEffect(() => {
-        console.log("run")
         if (filters.length > 0) {
             filterCharacters()
-
         } else {
             getData()
         }
@@ -64,15 +61,6 @@ const Listing = () => {
             setData(fillterd)
         }
     }
-
-    // const filterHandler = (value) => {
-    //     if (filters.includes(value)) {
-    //         const filterData = filters.filter(item => item !== value)
-    //         setFilters(filterData)
-    //         return
-    //     }
-    //     setFilters(prev => [...prev, value])
-    // }
 
     const filterHandler = useMemo(() => {
         return (value) => {
@@ -102,9 +90,6 @@ const Listing = () => {
                 filters.includes(character.gender.toLowerCase()) ||
                 filters.includes(character.species.toLowerCase())
             ) {
-                console.log('Filters:', filters.includes(character.gender.toLowerCase()));
-                console.log('Character Gender:', character.gender.toLowerCase());
-                console.log('Character Species:', character.species.toLowerCase());
                 return true;
             }
         });
@@ -122,12 +107,30 @@ const Listing = () => {
 
     return (
         <div className='conatiner'>
-            <div className='filterIcon'><TbFilterStar onClick={() => showFilters("show")} /></div>
+            <div className='filterIcon'>
+                <TbFilterStar onClick={() => showFilters("show")} />
+            </div>
             <div className='filters' id="filters">
-                <IoCloseOutline size={30} className='filter-close' onClick={() => showFilters("hide")} />
-                <h1 className='filter-heading'>Filters</h1>
-                <Filters label="species" filters={speciesFilter} handler={filterHandler} filteredValue={filters} />
-                <Filters label="gender" filters={genderFilter} handler={filterHandler} filteredValue={filters} />
+                <IoCloseOutline
+                    size={30}
+                    className='filter-close'
+                    onClick={() => showFilters("hide")}
+                />
+                <h1 className='filter-heading'>
+                    Filters
+                </h1>
+                <Filters
+                    label="species"
+                    filters={speciesFilter}
+                    handler={filterHandler}
+                    filteredValue={filters}
+                />
+                <Filters
+                    label="gender"
+                    filters={genderFilter}
+                    handler={filterHandler}
+                    filteredValue={filters}
+                />
             </div>
             <div className='contant'>
                 <div>
@@ -142,7 +145,10 @@ const Listing = () => {
                     {filters.map((filter) => (
                         <div className='filter-pill' key={filter}>
                             {filter}
-                            <IoCloseOutline className='icon' onClick={() => filterHandler(filter)} />
+                            <IoCloseOutline
+                                className='icon'
+                                onClick={() => filterHandler(filter)}
+                            />
                         </div>
                     ))}
                 </div>}

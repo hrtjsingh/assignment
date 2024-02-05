@@ -9,17 +9,7 @@ const SelectElement = ({ sortingHandler }) => {
         sortingHandler(value)
     }
     return (
-        // <select onChange={sortingHandler}>
-        //     <option value="">
-        //         Sort By ID
-        //     </option>
-        //     <option value="asc">
-        //         Ascending
-        //     </option>
-        //     <option value="dsc">
-        //         descending
-        //     </option>
-        // </select>
+
         <div class="dropdown">
             <button class="dropbtn">{sortType} <FaSortDown /></button>
             <div class="dropdown-content">

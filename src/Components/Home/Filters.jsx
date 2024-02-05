@@ -2,7 +2,6 @@ import React from 'react'
 
 
 const Filters = ({ label, filters, handler, filteredValue }) => {
-    console.log(filteredValue)
     return (
         <div className='filter-box'>
             <h3 className='filter-title'>{label}</h3>
