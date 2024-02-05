@@ -16,7 +16,6 @@ const Filters = ({ label, filters, handler, filteredValue }) => {
                     />
                     <label htmlFor={item.value}></label>
                     <span>{item.label}</span>
-
                 </div>
             ))
             }

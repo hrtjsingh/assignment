@@ -160,7 +160,6 @@ const Listing = () => {
                         data?.map((item) => (
                             <Card key={Math.random()} data={item} />
                         ))}
-
                 </div>
             </div>
         </div>
