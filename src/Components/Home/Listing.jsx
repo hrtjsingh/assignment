@@ -1,20 +1,13 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Filters from './Filters'
 import { TbFilterStar } from "react-icons/tb";
 import { IoCloseOutline } from "react-icons/io5";
+
+import Filters from './Filters'
 import SearchBar from './SearchBar'
 import Card from './Card'
-import useInfiniteScroll from '../../utils/useInfiniteScroll';
+import useInfiniteScroll from '../../utils/useInfiniteScroll.js';
+import { apiUrl, genderFilter, speciesFilter } from '../../utils/Constants.js';
 
-const speciesFilter = [
-    { label: "human", value: "human" },
-    { label: "mytholog", value: "mytholog" },
-    { label: "alien", value: "alien" }
-]
-const genderFilter = [
-    { label: "male", value: "male" },
-    { label: "female", value: "female" }
-]
 
 const Listing = () => {
     const [data, setData] = useState([])
@@ -25,22 +18,39 @@ const Listing = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [recordsEnd, setRecordsEnd] = useState(false);
 
-    const getData = (currentPage = 1) => {
-        fetch(`https://rickandmortyapi.com/api/character?page=${currentPage}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.info.pages === currentPage) {
-                    setRecordsEnd(true)
-                }
-                setCurrentPage(prev => prev + 1)
-                setIsLoading(false)
-                setData(prev => [...prev, ...data.results])
-            })
-            .catch(error => console.error('Error fetching data:', error));
+    // const getData= (currentPage = 1) => {
+    //     fetch(`https://rickandmortyapi.com/api/character?page=${currentPage}`)
+    //         .then(response => response.json())
+    //         .then(data => {
+    //             if (data.info.pages === currentPage) {
+    //                 setRecordsEnd(true)
+    //             }
+    //             setCurrentPage(prev => prev + 1)
+    //             setIsLoading(false)
+    //             setData(prev => [...prev, ...data.results])
+    //         })
+    //         .catch(error => console.error('Error fetching data:', error));
+    // }
+
+    const getData = async (currentPage = 1) => {
+        try {
+            let res = await fetch(`${apiUrl}/character?page=${currentPage}`)
+            res = await res.json()
+            if (res.info.pages === currentPage) {
+                setRecordsEnd(true)
+            }
+            setCurrentPage(prev => prev + 1)
+            setIsLoading(false)
+            setData(prev => [...prev, ...res.results])
+        } catch (error) {
+            console.log(error)
+        }
     }
-
-    const [isFetching, setIsFetching] = useInfiniteScroll(getData, currentPage, recordsEnd);
-
+    const { scrollRef } = useInfiniteScroll(() => {
+        if (!recordsEnd) {
+            getData(currentPage);
+        }
+    }, recordsEnd);
     useEffect(() => {
         if (filters.length > 0) {
             filterCharacters()
@@ -151,7 +161,7 @@ const Listing = () => {
                         </div>
                     ))}
                 </div>}
-                <div className='listing'>
+                <div className='listing' ref={scrollRef}>
                     {filters.length > 0 ?
                         tempData?.map((item) => (
                             <Card key={Math.random()} data={item} />

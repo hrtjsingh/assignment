@@ -10,9 +10,9 @@ const SelectElement = ({ sortingHandler }) => {
     }
     return (
 
-        <div class="dropdown">
-            <button class="dropbtn">{sortType} <FaSortDown /></button>
-            <div class="dropdown-content">
+        <div className="dropdown">
+            <button className="dropbtn">{sortType} <FaSortDown /></button>
+            <div className="dropdown-content">
                 <span onClick={() => changeHandler("asc")}>Ascending</span>
                 <span onClick={() => changeHandler("dsc")}>Descending</span>
             </div>
